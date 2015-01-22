@@ -5,11 +5,12 @@
 
 import happybase
 import random
+from struct import *
 import numpy as np
 
 def write_user_geo(table, record):
-	table.put(record[0], {'Geo:latitude': record[1],
-		'Geo:longitude': record[2]})
+	table.put(record[0], {'Geo:latitude': pack('f',record[1]),
+		'Geo:longitude': pack('f',record[2])})
 
 if __name__ == "__main__":
 	minLat = 37.383165
@@ -31,6 +32,6 @@ if __name__ == "__main__":
 		write_user_geo(table, (users[i], userGeos[i,0], userGeos[i,1]))
 	# print all the table data
 	for key, data in table.scan():
-    	print key, data
+    	print key, unpack('f', data['Geo:latitude']), unpack('f', data['Geo:longitude'])
 	# close the connection
 	connection.close()
