@@ -9,7 +9,7 @@ from struct import *
 import numpy as np
 
 def write_user_geo(table, record):
-	table.put(record[0], {'Geo:latitude': pack('f',record[1]),
+	table.put(pack('i',record[0]), {'Geo:latitude': pack('f',record[1]),
 		'Geo:longitude': pack('f',record[2])})
 
 if __name__ == "__main__":
@@ -34,5 +34,5 @@ if __name__ == "__main__":
 	for key, data in table.scan():
 		print unpack('i', key), unpack('f', data['Geo:latitude']), unpack('f', data['Geo:longitude'])
 	# close the connection
-	np.save('user_geos', np.concatnate((users, userGeos), axis=1))
+	np.save('user_geos', np.concatenate((users, userGeos), axis=1))
 	connection.close()
