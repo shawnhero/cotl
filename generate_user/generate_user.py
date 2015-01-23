@@ -18,7 +18,7 @@ if __name__ == "__main__":
 	leftLong = -122.442800
 	rightLong = -122.192862
 	random.seed(2014)
-	users = np.empty(100, dtype=int)
+	users = np.empty((100,1), dtype=int)
 	userGeos = np.empty((100,2), dtype=float)
 	## establish a connection to the table
 	connection = happybase.Connection('ec2-54-67-86-242.us-west-1.compute.amazonaws.com')
@@ -32,6 +32,7 @@ if __name__ == "__main__":
 		write_user_geo(table, (users[i], userGeos[i,0], userGeos[i,1]))
 	# print all the table data
 	for key, data in table.scan():
-    	print key, unpack('f', data['Geo:latitude']), unpack('f', data['Geo:longitude'])
+		print unpack('i', key), unpack('f', data['Geo:latitude']), unpack('f', data['Geo:longitude'])
 	# close the connection
+	np.save('user_geos', np.concatnate((users, userGeos), axis=1))
 	connection.close()
