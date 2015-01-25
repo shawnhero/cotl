@@ -5,12 +5,12 @@
 ## 3. Retrieve nearyby users and add the photo to their newsfeed 
 ## 6. Send the actual photo to S3
 
-from kafka import KafkaClient, MultiProcessConsumer
+from kafka import KafkaClient, MultiProcessConsumer, SimpleConsumer
 
 kafka = KafkaClient("localhost:9092")
 
 # This will split the number of partitions among two processes
-consumer = MultiProcessConsumer(kafka, "my_group", "post_photos", num_procs=5)
+consumer = MultiProcessConsumer(kafka, "my_group", "post_photos", num_procs=1)
 
 count = 0
 while True:

@@ -72,17 +72,6 @@ es.refresh('user_geo_index')
 query = {
 	"from" : 0, "size" : 3,
 	'query': {
-         # 'filtered': {
-         #     'filter': {
-         #      "geo_distance" : {
-         #        "distance" : "1102km",
-         #        "location" : {
-         #            "lat" : 41.12,
-         #            "lon" : -71.34
-         #        }
-         #    }
-         #     },
-         # },
          "match_all" : { }
      }
      ,

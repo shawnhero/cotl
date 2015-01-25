@@ -1,0 +1,13 @@
+[Sun Jan 25 20:19:24 2015] [error] [client 65.87.19.170] (13)Permission denied: access to / denied
+[Sun Jan 25 20:19:24 2015] [error] [client 65.87.19.170] (13)Permission denied: access to /favicon.ico denied, referer: http://54.215.212.18:9080/
+[Sun Jan 25 20:19:26 2015] [error] [client 65.87.19.170] (13)Permission denied: access to / denied
+[Sun Jan 25 20:23:46 2015] [error] [client 65.87.19.170] (13)Permission denied: access to / denied
+[Sun Jan 25 20:23:47 2015] [error] [client 65.87.19.170] (13)Permission denied: access to / denied
+[Sun Jan 25 20:26:56 2015] [error] [client 65.87.19.170] (13)Permission denied: access to / denied
+[Sun Jan 25 20:26:57 2015] [error] [client 65.87.19.170] (13)Permission denied: access to / denied
+[Sun Jan 25 20:27:11 2015] [error] [client 65.87.19.170] (13)Permission denied: access to / denied
+[Sun Jan 25 20:28:59 2015] [error] [client 65.87.19.170] (13)Permission denied: access to / denied
+[Sun Jan 25 20:30:11 2015] [error] [client 65.87.19.170] (13)Permission denied: access to / denied
+[Sun Jan 25 20:30:11 2015] [error] [client 65.87.19.170] (13)Permission denied: access to /favicon.ico denied, referer: http://ec2-54-215-212-18.us-west-1.compute.amazonaws.com/
+[Sun Jan 25 20:30:48 2015] [error] [client 65.87.19.170] (13)Permission denied: access to / denied
+[Sun Jan 25 20:30:49 2015] [error] [client 65.87.19.170] (13)Permission denied: access to /flasktest1 denied
