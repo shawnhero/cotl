@@ -1,0 +1,52 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+    <style type="text/css">
+    html,body
+    {
+    margin:0;
+    padding:0;
+    }
+
+    body {
+        text-align: center;
+        background-color: #2f2f31;
+        height: 100%!important;
+        }
+    #container {
+        background-color: #2f2f31;
+        margin: 0 auto !important;
+        height: 800px;
+        width: 100%;
+        padding: 0;
+        overflow:auto;
+    }   
+    .loading {
+        margin-top: 10em;
+        text-align: center;
+        color: gray;
+    }
+</style>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>Highmaps Example</title>
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+        
+	</head>
+	<body>
+
+<script src="http://cdnjs.cloudflare.com/ajax/libs/proj4js/2.2.2/proj4.js"></script>
+<script src="http://github.highcharts.com/latlon/highmaps.js"></script>
+<!-- <script src="highmaps.js"></script> -->
+<script src="http://code.highcharts.com/maps/highmaps.js"></script>
+<script src="http://www.highcharts.com/samples/data/maps/world.js"></script>
+<script src="http://code.highcharts.com/maps/modules/exporting.js"></script>
+<!-- <script src="http://code.highcharts.com/mapdata/countries/gb/gb-all.js"></script>
+<script src="http://code.highcharts.com/mapdata/custom/world.js"></script> -->
+<script src="http://code.highcharts.com/mapdata/countries/us/custom/us-all-mainland.js"></script>
+
+
+<script src='point_listener.js'></script>
+<div id="container"></div>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/highstock/2.0.4/themes/dark-unica.js'></script>
+	</body>
+</html>

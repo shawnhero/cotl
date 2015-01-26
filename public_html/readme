@@ -1,0 +1,5 @@
+Deployed Apache2 + Flask with WSGI
+
+One drawback of such deployment is that Asynchronous Applications cannot be supported, which blocks the SSE (server-side event).
+
+Therefore I used another flask instance(flask_standalone/) running WSGIServer from gevent.wsgi directly.
