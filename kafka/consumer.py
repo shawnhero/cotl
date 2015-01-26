@@ -1,3 +1,4 @@
+# A simple consumer in kafka
 from kafka import KafkaClient, SimpleConsumer
 
 kafka = KafkaClient("localhost:9092")

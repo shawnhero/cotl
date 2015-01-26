@@ -1,3 +1,6 @@
+## to test the location search of ES
+## write several geo points to ES, then return the neighbors by distance order
+
 from datetime import datetime
 from pyelasticsearch.client import ElasticSearch
 

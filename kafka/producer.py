@@ -1,3 +1,5 @@
+# A sample producer in kafka
+# Not used but just for demo
 from kafka import KafkaClient, SimpleProducer
 
 # To send messages synchronously
