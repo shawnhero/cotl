@@ -8,88 +8,98 @@ from pyelasticsearch.client import ElasticSearch
 es = ElasticSearch('http://localhost:9200/')
 
 
-entry_mapping = {
-    'entry_type': {
-        'properties': {
-            'uid': {'type': 'integer'},
-            'location': {'type': 'geo_point'}
-        }
-    }
+mapping = {
+	'user_geos': {
+		'properties': {
+			'uid': {'type': 'integer'},
+			'location': {'type': 'geo_point'}
+		}
+	},
+	 'photo_geos': {
+		'properties': {
+			'pid': {'type': 'integer'},
+			'location': {'type': 'geo_point'}
+		}
+	}
 }
 
 ## create index
 
 try:
-	es.delete_index('user_geo_index')
-	print "Index 'user_geo_index' deleted!"
+	es.delete_index('geos')
+	print "Index 'geos' deleted!"
 except Exception as e:
 	pass
-es.create_index('user_geo_index', settings={'mappings': entry_mapping})
-print "Index 'user_geo_index' created!"
-es.refresh('user_geo_index')
+es.create_index('geos', settings={'mappings': mapping})
+print "Index 'geos' created!"
+es.refresh('geos')
 
 ## bulk index
 documents = [
-    {
-        'uid': 201,
-        "location" : {
+	{
+		'uid': 201,
+		"location" : {
  			"lat" : 41.12,
  			"lon" : -71.34
  		}
-    },
-    {
-        'uid': 202,
-        "location" : {
+	},
+	{
+		'uid': 202,
+		"location" : {
  			"lat" : 41.13,
  			"lon" : -71.35
  		}
-    },
-    {
-        'uid': 203,
-        "location" : {
+	},
+	{
+		'uid': 203,
+		"location" : {
  			"lat" : 42.12,
  			"lon" : -72.34
  		}
-    },
-    {
-        'uid': 204,
-        "location" : {
+	},
+	{
+		'uid': 204,
+		"location" : {
  			"lat" : 45.102,
  			"lon" : -75.304
  		}
-    },
-    {
-        'uid': 205,
-        "location" : {
+	},
+	{
+		'uid': 205,
+		"location" : {
  			"lat" : 51.22,
  			"lon" : -81.44
  		}
-    },
+	},
 
-    # ...
+	# ...
 ]
-es.bulk_index('user_geo_index', 'entry_type', documents, id_field='uid')
+# es.bulk_index('geos', 'user_geos', documents) #,id_field='uid'
+
+for doc in documents:
+    es.index('geos', 'user_geos', doc)
 print "All documents indexed successfully!"
-es.refresh('user_geo_index')
+es.refresh('geos')
 
 query = {
 	"from" : 0, "size" : 3,
 	'query': {
-         "match_all" : { }
-     }
-     ,
-     "sort" : [
-        {
-            "_geo_distance" : {
-                "location" : [41.12, -71.34],
-                "order" : "desc",
-                "unit" : "km"
-            }
-        }
-    ]
+		 "match_all" : { }
+	 }
+	 ,
+	 "sort" : [
+		{
+			"_geo_distance" : {
+				"location" : [41.12, -71.34],
+				"order" : "desc",
+				"unit" : "km"
+			}
+		}
+	]
 
  }
-# print es.get('user_geo_index', 'entry_type', 205)
-res =  es.search(query, index='user_geo_index')
+# print es.get('geos', 'user_geos', 205)
+res =  es.search(query, index='geos')
+print res
 for r in res['hits']['hits']:
 	print (r['sort'], r['_id'], r['_source']['location']) 

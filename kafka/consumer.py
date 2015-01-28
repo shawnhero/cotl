@@ -3,7 +3,7 @@ from kafka import KafkaClient, SimpleConsumer
 
 kafka = KafkaClient("localhost:9092")
 # To consume messages
-consumer = SimpleConsumer(kafka, "my-group", "my-topic")
+consumer = SimpleConsumer(kafka, "my_group", "ts")
 
 for message in consumer:
     # message is raw byte string -- decode if necessary!

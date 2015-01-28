@@ -2,13 +2,12 @@
 ## 2. Assign each photo with a user (user data pre-loaded)
 ## 3. Send the Photo to S3
 ## 4. Send the information to kafka
-import threading
+
 import flickrapi
 import json
 import time
 import numpy as np
 import sys
-import md5
 from kafka import KafkaClient, SimpleProducer
 
 user_geos = np.load('user_geos.npy')
@@ -20,15 +19,12 @@ def sendout(pid, secret):
 	api_key = u'5fcf00d1facf3e9352b1945607eb690a'
 	api_secret = u'150e0c952c4ee6e6'
 	flickr = flickrapi.FlickrAPI(api_key, api_secret, format='json')
-	# extract info from the parsed json
 	raw_json =  flickr.photos.getInfo(photo_id=pid, secret=secret)
 	photo_info = json.loads(raw_json.decode('utf-8'))
-	pid = photo_info['photo']['id']
 	title = photo_info['photo']['title']['_content']
 	description = photo_info['photo']['description']['_content']
 	tags = [t['_content'] for t in photo_info['photo']['tags']['tag']]
 	URL = "https://farm"+str(photo_info['photo']['farm'])+".staticflickr.com/"+str(photo_info['photo']['server'])+"/"+str(pid)+"_"+str(secret)+"_b.jpg"
-	timeposted = photo_info['photo']['dates']['posted']
 
 	# to add: store the file to S3
 
@@ -39,19 +35,16 @@ def sendout(pid, secret):
 	mydict['data']['user_id'] = user_id
 	mydict['data']['action'] = 'post'
 	mydict['data']['location'] = {'latitude': user_geos[user_id, 1], 'longitude': user_geos[user_id, 2]}
-	mydict['data']['photo'] = {
-		'pid': pid,
-		'title':title, 
+	mydict['data']['photo'] = {'title':title, 
 		'description': description, 
 		'tags': tags,
-		'URL': URL,
-		'timeposted': int(timeposted)
+		'URL': URL
 	}
 	raw_data = json.dumps(mydict)
 
 	# send data to kafka
-	print 'pushing', raw_data
-	producer.send_messages("ts", raw_data)
+	print 'sending\n', raw_data
+	producer.send_messages("post_photos", raw_data)
 
 	return
 
@@ -87,17 +80,17 @@ if __name__ == "__main__":
 				existed = True
 			if not existed:
 				cur_dict[pid] = True
-				thread = threading.Thread(target=sendout, args=(p['id'], p['secret'],))
-				thread.start()
-				#sendout(p['id'], p['secret'])
+				sendout(p['id'], p['secret'])
 				count = count + 1
-		if pre_dict is not None:
+		if not pre_dict is None:
 			if not pre_useful:
-				# print "pre dict no longer useful, deleting.."
+				print "pre dict no longer useful, deleting.."
 				pre_dict = None
 		if len(cur_dict)>=d_size:
-			# print "current dict full", len(cur_dict), ", switching.."
+			print "current dict full", len(cur_dict), ", switching.."
 			pre_dict = cur_dict
 			cur_dict = {}
-		# print count, "New come in 1 second"
+		# if i>0:
+		# 	print count, "New come in 1 second"
+		# 	data[i-1] = count
 		time.sleep(1)
