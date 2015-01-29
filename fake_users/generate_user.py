@@ -134,7 +134,16 @@ class GenerateUsers():
 
 
 if __name__ == "__main__":
-	g = GenerateUsers(num=1000)
+	if len(sys.argv)==1:
+		# start the stream in the natural mode
+		num = 100
+	elif len(sys.argv)==2:
+		try:
+			num = int(sys.argv[1])
+		except ValueError:
+			print "Value Error!", sys.argv[1]
+			sys.exit(0)
+	g = GenerateUsers(num=num)
 	g.generate()
 	g.write_hbase_geo()
 	g.write_es_geo()
