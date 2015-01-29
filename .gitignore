@@ -4,3 +4,4 @@ old/
 old/*
 public_html/logs/*
 *.pyc
+fake_post_photos/api_keys.txt

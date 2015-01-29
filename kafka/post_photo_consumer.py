@@ -1,12 +1,6 @@
- #!/usr/bin/env python
-## consume the message from kafka
+#!/usr/bin/env python
 
-## 1. Send the 'user post photo' event/other relations to HBase
-## 2. Send the 'user is at location' infor to Solr
-## 3. Retrieve nearyby users and add the photo to their newsfeed 
-## 6. Send the actual photo to S3
-
-# to do, figure out how to do batch job of a single consumer
+## consumer behavior for the topic 'post_photos'
 
 import threading, logging, time
 import happybase
