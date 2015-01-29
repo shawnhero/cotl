@@ -52,7 +52,8 @@ connection.create_table('user_location', families)
 
 
 families = {
-	'newsfeed': dict(max_versions=1)
+	# set the time to live to be 3 days, i.e.  259200s
+	'newsfeed': dict(max_versions=1,time_to_live=259200)
 }
 connection.create_table('user_newsfeed', families)
 

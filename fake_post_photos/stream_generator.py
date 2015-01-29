@@ -40,7 +40,7 @@ def sendout(pid, secret):
 	mydict['data']['action'] = 'post'
 	mydict['data']['location'] = {'latitude': user_geos[user_id, 1], 'longitude': user_geos[user_id, 2]}
 	mydict['data']['photo'] = {
-		'pid': pid,
+		'pid': int(pid),
 		'title':title, 
 		'description': description, 
 		'tags': tags,

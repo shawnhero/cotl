@@ -3,3 +3,4 @@ shawn-insight.pem
 old/
 old/*
 public_html/logs/*
+*.pyc
