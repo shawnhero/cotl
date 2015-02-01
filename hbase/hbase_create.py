@@ -3,7 +3,7 @@
 import happybase
 import sys
 
-connection = happybase.Connection('ec2-54-67-86-242.us-west-1.compute.amazonaws.com')
+connection = happybase.Connection('c0tl.com')
 
 
 # prompt confirm

@@ -4,7 +4,7 @@
 import happybase
 import time
 from struct import *
-connection = happybase.Connection('ec2-54-67-86-242.us-west-1.compute.amazonaws.com')
+connection = happybase.Connection('c0tl.com')
 user_newsfeed = connection.table('user_newsfeed')
 row = user_newsfeed.row(pack('Q',1),columns=['newsfeed'])
 print row

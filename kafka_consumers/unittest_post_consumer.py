@@ -8,7 +8,7 @@ class TestConsumerWorkers(unittest.TestCase):
 
 	def setUp(self):
 		self.parsed_msg = {"data": {"action": "post", "photo": {"timeposted": 1422466662, "description": "", "tags": [], "URL": "https://farm8.staticflickr.com/7324/16388566132_ba5bbfd888_b.jpg", "title": "", "pid": 16388566132}, "user_id": 12, "location": {"latitude": 37.419809522865279, "longitude": -122.31275946636089}}}
-		self.hbasehost = 'ec2-54-67-86-242.us-west-1.compute.amazonaws.com'
+		self.hbasehost = 'http://c0tl.com'
 		self.eshost = 'http://localhost:9200/'
 
 	def test_consume_newsfeed(self):

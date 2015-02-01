@@ -45,29 +45,65 @@
     </div>
 </div>
 <div class="container">
-    <h1>COTL Demo</h1>
+    <h1><a href="/">COTL Demo</a></h1>
     <blockquote>
         <p>COTL is a location-based photo sharing system. It's something like instagram, tinder, and snapchat.</p>
     </blockquote>
-    <form class="form-inline">
+<!--     <form class="form-inline">
         <div class="form-group">
             <button id="image-gallery-button" type="button" class="btn btn-primary btn-lg">
                 <i class="glyphicon glyphicon-picture"></i>
                 Launch Image Gallery
             </button>
+
         </div>
-    </form>
+    </form> -->
+
+
+
+
+
+
+
+
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+    
+    <ul class="nav navbar-nav">
+
+    <li role="presentation"><a href="dist/" target="_blank">Distribution of Newsfeed Numbers</a></li>
+    <form class="navbar-form navbar-left" role="search" id='uid_newsfeed'>
+
+  <div class="form-group">
+
+    <input type="text" class="form-control" placeholder="UID" id="uid">
+  </div>
+  <button type="submit" class="btn btn-default">Get Newsfeed!</button>
+</form>
+  <li role="presentation"><a href="tags/">Trending Tags</a></li>
+  <li role="presentation"><a href="nearby/">NearBy</a></li>
+</ul>
+
+      
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+
+
+
+
+
+
+
+
     <br>
     <!-- The container for the list of example images -->
     <div id="links">
-        <a href="https://farm9.staticflickr.com/8617/16397175205_8dd61720e7_b.jpg" title="Banana" data-gallery>
-        <img src="https://farm9.staticflickr.com/8617/16397175205_8dd61720e7_m.jpg" alt="Banana">
-        </a>
-        <a href="https://farm8.staticflickr.com/7436/16397175445_a850a139cc_b.jpg" title="Apple" data-gallery>
-        <img src="https://farm8.staticflickr.com/7436/16397175445_a850a139cc_m.jpg" alt="Apple">
-        </a>
-        <a href="https://farm8.staticflickr.com/7407/16396247322_efd378a80f_b.jpg" title="Orange" data-gallery>
-        <img src="https://farm8.staticflickr.com/7407/16396247322_efd378a80f_m.jpg" alt="Orange">
         </a>
     </div>
     <br>
@@ -113,14 +149,14 @@
 <script src="js/bootstrap-image-gallery.js"></script>
 <script src="js/demo.js"></script>
 <script>
-document.getElementById('links').onclick = function (event) {
-    event = event || window.event;
-    var target = event.target || event.srcElement,
-        link = target.src ? target.parentNode : target,
-        options = {index: link, event: event},
-        links = this.getElementsByTagName('a');
-    blueimp.Gallery(links, options);
-};
+// document.getElementById('links').onclick = function (event) {
+//     event = event || window.event;
+//     var target = event.target || event.srcElement,
+//         link = target.src ? target.parentNode : target,
+//         options = {index: link, event: event},
+//         links = this.getElementsByTagName('a');
+//     blueimp.Gallery(links, options);
+// };
 </script>
 </body> 
 </html>

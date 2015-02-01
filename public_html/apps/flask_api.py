@@ -1,8 +1,8 @@
 #!/usr/bin/python
-from flask import Flask, request
-import json
+from flask import Flask, request, json
+import flask
 import happybase
-hbasehost = 'ec2-54-67-86-242.us-west-1.compute.amazonaws.com'
+hbasehost = 'c0tl.com'
 from struct import *
 app = Flask(__name__)
 
@@ -29,9 +29,15 @@ def newsfeed(userid):
 		connection = happybase.Connection(hbasehost)
 		user_newsfeed = connection.table('user_newsfeed')
 		row = user_newsfeed.row(pack('Q',uid),columns=['newsfeed'])
+		for key in row.keys():
+			# print type(key), type(json.loads(row[key]))
+			row[key] = json.loads(row[key])
 	except Exception as e:
+		print "Exception"
 		return str(e)
-	return str(row)
+	print type(row)
+	# print row
+	return json.dumps(row)
 
 # given a location, return the most popular photos
 @app.route('/location/<geo>')

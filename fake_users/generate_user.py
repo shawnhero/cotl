@@ -41,7 +41,7 @@ class GenerateUsers():
 		print table_name, "deleted."
 
 	# write userGeo information to HBase
-	def write_hbase_geo(self, hbase_host='ec2-54-67-86-242.us-west-1.compute.amazonaws.com', user_tbl_name="users", geo_tbl_name='user_location'):
+	def write_hbase_geo(self, hbase_host='c0tl.com', user_tbl_name="users", geo_tbl_name='user_location'):
 		## establish a connection to the table
 		try:
 			connection = happybase.Connection(hbase_host)

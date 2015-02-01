@@ -15,12 +15,6 @@ import sys
 import md5
 from kafka import KafkaClient, SimpleProducer
 
-# user_geos = np.load('user_geos.npy')
-# kafka = KafkaClient("localhost:9092")
-# producer = SimpleProducer(kafka)
-
-# api_key = u'5fcf00d1facf3e9352b1945607eb690a'
-# api_secret = u'150e0c952c4ee6e6'
 
 class ProduceMsg(threading.Thread):
 	def __init__(self,pid,secret,api_key, api_secret, producer, topic_name, user_geos):
@@ -40,9 +34,9 @@ class ProduceMsg(threading.Thread):
 		# do the decoding below
 		photo_info = json.loads(raw_json.decode('utf-8'))
 		pid = photo_info['photo']['id']
-		title = photo_info['photo']['title']['_content']
-		description = photo_info['photo']['description']['_content']
-		tags = [t['_content'] for t in photo_info['photo']['tags']['tag']]
+		title = photo_info['photo']['title']['_content'].replace('"', '').replace("'", '').decode('utf-8').encode('utf-8')
+		description = photo_info['photo']['description']['_content'].replace('"', '').decode('utf-8').encode('utf-8')
+		tags = [t['_content'].replace('"', '').replace("'", '').decode('utf-8').encode('utf-8') for t in photo_info['photo']['tags']['tag']]
 		URL = "https://farm"+str(photo_info['photo']['farm'])+".staticflickr.com/"+str(photo_info['photo']['server'])+"/"+str(pid)+"_"+str(self.secret)+"_b.jpg"
 		timeposted = photo_info['photo']['dates']['posted']
 		# to add: store the file to S3
@@ -55,7 +49,7 @@ class ProduceMsg(threading.Thread):
 			"photo": {
 				'pid': int(pid),
 				'title': title, 
-				'description': description, 
+				'description': description,
 				'tags': tags,
 				'URL': URL,
 				'timeposted': int(timeposted)
@@ -201,10 +195,11 @@ def readkeys(path_to_file):
 def savephoto():
 	pass
 
-if __name__ == "__main__":
+def evaluate_input():
 	if len(sys.argv)==1:
 		# start the stream in the natural mode
 		print "natural mode"
+		num, ttr = 0, 0
 	elif len(sys.argv)==2:
 		try:
 			num = int(sys.argv[1])
@@ -215,6 +210,7 @@ if __name__ == "__main__":
 		# start the stream in a controlled mode
 		print "controlled mode:", 'natural' if num==0 else num
 		print "time to run: infinite"
+		ttr = 0
 	elif len(sys.argv)==3:
 		try:
 			num = int(sys.argv[1])
@@ -229,3 +225,22 @@ if __name__ == "__main__":
 	else:
 		print "Usage: [*.py] [optional: throughput number] [optional: seconds to run]"
 		sys.exit(0)
+	return num, ttr
+
+if __name__ == "__main__":
+	num, ttr = evaluate_input()
+	# preparation works
+	keys, secrets = readkeys('api_keys.txt')
+	user_geos = np.load('../fake_users/user_geos.npy')
+	kafkahost = "localhost:9092"
+	topic_name = 'new_b'
+	stream = StreamOut(
+				num,
+				user_geos, 
+				kafkahost, 
+				topic_name,
+				keys,
+				secrets,
+				ttr
+				 )
+	stream.run()
