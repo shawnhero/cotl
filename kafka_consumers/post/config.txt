@@ -1,0 +1,4 @@
+c0tl.com #Hbase Host
+http://localhost:9200 #Elastic Search Host
+localhost:9092 #Kafka Host 
+c0tl.com #HDFS Host
