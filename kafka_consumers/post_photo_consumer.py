@@ -8,7 +8,11 @@ from struct import *
 import json
 from kafka import KafkaClient, SimpleConsumer, MultiProcessConsumer
 from pyelasticsearch.client import ElasticSearch
+from webhdfs.webhdfs import WebHDFS
+import os, tempfile
+import time
 
+webhdfs = WebHDFS("c0tl.com", 50070, "hdfs")
 
 _DEBUG_MODE = True
 _HBASEHOST = 'c0tl.com'
@@ -19,29 +23,40 @@ _ESHOST = 'http://localhost:9200/'
 # 1. Find the nearest N neighbors from elastic search
 # 2. Append that photo to their newsfeeds with a time-to-live(days) para
 def consume_newsfeed(parsed_msg, hbasepool, eshost, indexname='geos', doc_name='user_geos',tbl_name='user_newsfeed', num_neighbors=10):
-	lon = parsed_msg['data']['location']['longitude']
 	lat = parsed_msg['data']['location']['latitude']
+	lon = parsed_msg['data']['location']['longitude']
+	lat, lon = float(lat), float(lon)
 	# connect to elasticsearch and return the neighbors
 	es = ElasticSearch(eshost)
 	query = {
 		"from" : 0, "size" : num_neighbors,
 		'query': {
 			 "match_all" : { }
-		 }
-		 ,
+		 },
+		 "filter" : {
+			"geo_distance" : {
+				"distance" : "100km",
+				"location" : {
+					"lat" : lat,
+					"lon" : lon
+				}
+			}
+		},
 		 "sort" : [
 			{
 				"_geo_distance" : {
-					"location" : [lat, lon],
+					"location" :  {
+						"lat" : lat,
+						"lon" : lon
+					},
 					"order" : "asc",
 					"unit" : "km"
+					# ,"distance_type": "plane"
 				}
 			}
 		]
 
 	 }
-	print "Query to elasticsearch,"
-	print query
 	res =  es.search(query, index=indexname, doc_type=doc_name)
 	## store the nearest neighbors in a list
 	uids = [int(r['_id']) for r in res['hits']['hits']]
@@ -112,10 +127,6 @@ def consume_photo(parsed_msg, hbasepool, tbl_name='photos'):
 		born_lat = pack('d', parsed_msg['data']['location']['latitude'])
 		born_lon = pack('d', parsed_msg['data']['location']['longitude'])
 		tags = parsed_msg['data']['photo']['tags']
-		# make sure the 'tags' is a list
-		assert(type(tags)==type([]))
-		# convert it to a comma-seperated string
-		tags = ','.join(tags)
 		# pack it
 		title = parsed_msg['data']['photo']['title']
 		description = parsed_msg['data']['photo']['description']
@@ -131,15 +142,16 @@ def consume_photo(parsed_msg, hbasepool, tbl_name='photos'):
 							'details:postby': postby,
 							'details:born_lat': born_lat,
 							'details:born_lon': born_lon,
-							'details:tags': tags,
+							'details:tags':  tags,
 							'details:title': title,
-							'details:description': description,
+							'details:description': description,#.decode('utf-8'),
 							'details:url': url,
 							'details:timeposted': pack('i', timeposted)
 						}, timestamp=timeposted
 					)
 	except Exception as e:
 		print str(e)
+		print parsed_msg
 		raise
 # given a single parsed message, index the user's location as well as the photo's location in elastic search
 def consume_location(parsed_msg, eshost, indexname='geos', user_type='user_geos', photo_type='photo_geos'):
@@ -163,7 +175,8 @@ def consume_location(parsed_msg, eshost, indexname='geos', user_type='user_geos'
 	es.index(indexname, user_type, user_doc)
 	es.index(indexname, photo_type, photo_doc)
 
-
+def consume_dump(parsed_msg, outputdir='/user/photo_dump'):
+	assert(parsed_msg['data']['action']=='post')
 	
 	
 
@@ -186,12 +199,8 @@ class Consume(threading.Thread):
 			print '-'*100
 			print self.name, 'pulls out one msg,'
 			print '-'*100
-			try:
-				self.handle_msg(message.message.value)
-			except Exception as e:
-				print str(e)
-				print message.message.value
-				pass
+			self.handle_msg(message.message.value)
+			print self.consumer.offsets
 	def handle_msg(self, msg):
 		parsed_msg = json.loads(msg)
 		if self.name=='newsfeed':
@@ -215,7 +224,6 @@ if __name__ == "__main__":
 	kafka = KafkaClient("localhost:9092")
 	post_topic_name = sys.argv[1]
 	if sys.argv[2]=='simple':
-		
 		consumer_newsfeed = SimpleConsumer(kafka, "newsfeed", post_topic_name,iter_timeout=5)
 		consumer_userphoto = SimpleConsumer(kafka, "userphoto", post_topic_name,iter_timeout=5)
 
@@ -233,9 +241,9 @@ if __name__ == "__main__":
 		print "Usage: [*.py] [topicname] [simple/multi]"
 		sys.exit(0)
 	pool = happybase.ConnectionPool(size=6, host=_HBASEHOST)
-	threads = [ Consume(consumer_newsfeed, 'newsfeed', _ESHOST,pool),
+	threads = [ Consume(consumer_photos, 'photos', _ESHOST,pool),
 				Consume(consumer_userphoto, 'userphoto', _ESHOST,pool),
-				Consume(consumer_photos, 'photos', _ESHOST,pool),
+				Consume(consumer_newsfeed, 'newsfeed', _ESHOST,pool),
 				Consume(consumer_geoupdate, 'geoupdate', _ESHOST,pool)
 				]
 	for t in threads:

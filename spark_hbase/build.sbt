@@ -10,5 +10,6 @@ libraryDependencies ++= Seq(
 	"org.apache.spark" % "spark-core_2.10" % "1.2.0",
 	"org.apache.hbase" % "hbase-common" % "0.98.8-hadoop2",
 	"org.apache.hbase" % "hbase-client" % "0.98.8-hadoop2",
-	"org.apache.hbase" % "hbase-server" % "0.98.8-hadoop2"
+	"org.apache.hbase" % "hbase-server" % "0.98.8-hadoop2",
+	"com.cloudera" % "spark-hbase" % "0.0.1-clabs"
 )

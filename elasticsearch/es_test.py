@@ -1,27 +1,47 @@
 from pyelasticsearch.client import ElasticSearch
+import sys
 # by default we connect to localhost:9200
-es = ElasticSearch('http://localhost:9200/')
 
-query = {
-	"from" : 0, "size" : 3,
-	'query': {
-		 "match_all" : { }
-	 }
-	 ,
-	 "sort" : [
-		{
-			"_geo_distance" : {
-				"location" : [41.12, -71.34],
-				"order" : "desc",
-				"unit" : "km"
+
+if __name__ == "__main__":
+	if len(sys.argv)!=3:
+		print "Usage: [*.py] [lat] [lon]"
+		sys.exit(0)
+	es = ElasticSearch('http://localhost:9200/')
+	lat = float(sys.argv[1])
+	lon = float(sys.argv[2])
+	print lat, lon
+	query = {
+		"from" : 0, "size" : 10,
+		'query': {
+			 "match_all" : { }
+		 },
+		 "filter" : {
+			"geo_distance" : {
+				"distance" : "100km",
+				"location" : {
+					"lat" : lat,
+					"lon" : lon
+				}
 			}
-		}
-	]
+		},
+		 "sort" : [
+			{
+				"_geo_distance" : {
+					"location" :  {
+						"lat" : lat,
+						"lon" : lon
+					},
+					"order" : "asc",
+					"unit" : "km"
+				}
+			}
+		]
 
- }
-query2 = {'sort': [{'_geo_distance': {'location': [37.41980952286528, -122.31275946636089], 'unit': 'km', 'order': 'asc'}}], 'query': {'match_all': {}}, 'from': 0, 'size': 10}
-# print es.get('geos', 'user_geos', 205)
-res =  es.search(query2, index='geos',doc_type=['user_geos'])
-uids = [r['_id'] for r in res['hits']['hits']]
-print len(uids)
-print uids
+	 }
+	res =  es.search(query, index='geos',doc_type=['user_geos'])
+	# print res
+	uids = [(r['_id'],r['sort'], r['_source']['location']) for r in res['hits']['hits']]
+	print len(uids)
+	for i in range(len(uids)):
+		print uids[i]

@@ -3,7 +3,7 @@
 # backgroud process for faking streamed data
 
 start() {
-    python post_photo_consumer.py &
+    python post_photo_consumer.py new_c simple > consumer.log &
     echo "Server started."
 }
  
