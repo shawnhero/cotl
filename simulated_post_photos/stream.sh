@@ -3,7 +3,7 @@
 # backgroud process for faking streamed data
 
 start() {
-    python stream_generator.py 0 40000 > stream.log&
+    python stream_generator.py 0 > stream.log&
     echo "stream_generator started."
 }
  

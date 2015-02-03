@@ -12,6 +12,9 @@ start() {
     echo "Photo consumer started."
     python consume_userphoto.py $1 &
     echo "UserPhoto consumer started."
+    python consume_hdfs_dump.py $1 &
+    # python consume_hdfs_dump.py new_e > /dev/null &
+    
 }
  
 stop() {
@@ -25,6 +28,9 @@ stop() {
     echo $pid
     kill $pid
     pid=`ps -ef | grep '[p]ython consume_userphoto.py' | awk '{ print $2 }'`
+    echo $pid
+    kill $pid
+    pid=`ps -ef | grep '[p]ython consume_hdfs_dump.py' | awk '{ print $2 }'`
     echo $pid
     kill $pid
 }

@@ -42,7 +42,8 @@ class BaseConsumer():
 			raise
 
 	def run(self):
-		consumer = SimpleConsumer(self.kafka, self.group_name, self.topic_name,iter_timeout=self.timeout)
+		consumer = SimpleConsumer(self.kafka, self.group_name, self.topic_name,iter_timeout=self.timeout, buffer_size=4096*8,max_buffer_size=None)
+		print "setting max_buffer_size=None"
 		try:
 			for message in consumer:
 				parsed_msg = json.loads(message.message.value)

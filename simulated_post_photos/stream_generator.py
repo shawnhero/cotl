@@ -22,7 +22,7 @@ def de_encode(input):
 			input = input.decode("utf-8", "mixed")
 		except Exception as e:
 			raise
-	input = input.replace('"', '').replace("'", '')
+	input = input.replace('"', ' ').replace("'", ' ').replace('\n',' ').replace('\t',' ')
 	return input.encode('ascii','ignore')
 
 class ProduceMsg(threading.Thread):
@@ -36,51 +36,56 @@ class ProduceMsg(threading.Thread):
 		self.topic_name = topic_name
 		self.user_geos = user_geos
 	def run(self):
-		# get the detailed information 
-		flickr = flickrapi.FlickrAPI(self.api_key, self.api_secret, format='json')
-		# extract info from the parsed json
-		raw_json =  flickr.photos.getInfo(photo_id=self.pid, secret=self.secret)
-		# do the decoding below
-		photo_info = json.loads(raw_json)
-		pid = photo_info['photo']['id']
+		try:
+			# get the detailed information 
+			flickr = flickrapi.FlickrAPI(self.api_key, self.api_secret, format='json')
+			# extract info from the parsed json
+			raw_json =  flickr.photos.getInfo(photo_id=self.pid, secret=self.secret)
+			# do the decoding below
+			photo_info = json.loads(raw_json)
+			pid = photo_info['photo']['id']
 
-		title = photo_info['photo']['title']['_content']
-		title = de_encode(title)
+			title = photo_info['photo']['title']['_content']
+			title = de_encode(title)
 
-		description = photo_info['photo']['description']['_content']
-		description = de_encode(description)
+			description = photo_info['photo']['description']['_content']
+			description = de_encode(description)
 
-		tags = [ de_encode( t['_content']) for t in photo_info['photo']['tags']['tag']]
+			tags = [ de_encode( t['_content']) for t in photo_info['photo']['tags']['tag']]
 
-		tags = ','.join(tags)
+			tags = ','.join(tags)
 
-		URL = "https://farm"+str(photo_info['photo']['farm'])+".staticflickr.com/"+str(photo_info['photo']['server'])+"/"+str(pid)+"_"+str(self.secret)+"_b.jpg"
-		timeposted = photo_info['photo']['dates']['posted']
-		# to add: store the file to S3
-		# construct dict
-		user_id =  np.random.randint(0,self.user_geos.shape[0])
-		print 'send by user', user_id
-		photo_dict = {}
-		photo_dict['data'] = {
-			"action": "post", 
-			'user_id': user_id,
-			"photo": {
-				'pid': int(pid),
-				'title': title, 
-				'description': description,
-				'tags': tags,
-				'URL': URL,
-				'timeposted': int(timeposted)
-			},
-			'location': {
-				'latitude': self.user_geos[user_id, 1], 
-				'longitude': self.user_geos[user_id, 2]
+			URL = "https://farm"+str(photo_info['photo']['farm'])+".staticflickr.com/"+str(photo_info['photo']['server'])+"/"+str(pid)+"_"+str(self.secret)+"_b.jpg"
+			timeposted = photo_info['photo']['dates']['posted']
+			# to add: store the file to S3
+			# construct dict
+			user_id =  np.random.randint(0,self.user_geos.shape[0])
+			print 'send by user', user_id
+			photo_dict = {}
+			photo_dict['data'] = {
+				"action": "post", 
+				'user_id': user_id,
+				"photo": {
+					'pid': int(pid),
+					'title': title, 
+					'description': description,
+					'tags': tags,
+					'URL': URL,
+					'timeposted': int(timeposted)
+				},
+				'location': {
+					'latitude': self.user_geos[user_id, 1], 
+					'longitude': self.user_geos[user_id, 2]
+				}
 			}
-		}
-		raw_data = json.dumps(photo_dict)
-		# print raw_data
-		# send to the producer
-		self.producer.send_messages(self.topic_name, raw_data)
+			raw_data = json.dumps(photo_dict)
+			print raw_data
+			# send to the producer
+			self.producer.send_messages(self.topic_name, raw_data)
+		except Exception as e:
+			print str(e)
+			return
+		
 		
 
 class StreamOut():
@@ -149,8 +154,15 @@ class StreamOut():
 		time_runned = 0
 		while True:
 			flickr = flickrapi.FlickrAPI(api_key, api_secret, format='json')
-			raw_json = flickr.photos.getRecent(per_page='50')
-			parsed = json.loads(raw_json.decode('utf-8'))
+			try:
+				raw_json = flickr.photos.getRecent(per_page='50')
+				parsed = json.loads(raw_json.decode('utf-8'))
+			except UnicodeDecodeError:
+				# flickr api will complain such error, anyway just wait a few seconds
+				# and retry
+				print str(e)
+				time.sleep(10)
+				continue
 			count = 0
 			pre_useful = False
 			batch_count = 0
@@ -251,7 +263,7 @@ if __name__ == "__main__":
 	keys, secrets = readkeys('api_keys.txt')
 	user_geos = np.load('../simulated_users/user_geos.npy')
 	kafkahost = "localhost:9092"
-	topic_name = 'new_c'
+	topic_name = 'new_e'
 	stream = StreamOut(
 				num,
 				user_geos, 
