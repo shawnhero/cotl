@@ -2,6 +2,8 @@
 
 A photo sharing system
 
+<iframe frameborder="0" webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen="" width="550" height="400" src="http://prezi.com/embed/nyrdqazqwfm_/?bgcolor=ffffff&amp;lock_to_path=1&amp;autoplay=0&amp;autohide_ctrls=0#"></iframe>
+
 ## Overview
 
 - Create randome users with random locations
