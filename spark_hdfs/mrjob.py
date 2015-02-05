@@ -89,13 +89,13 @@ def flat_row(line):
 if __name__=="__main__":
 	conf = (SparkConf()
 			.setMaster("local")
-			.setAppName("TagCounter")
+			.setAppName("MRJOB")
 			.set("spark.executor.memory", "1g"))
 	sc = SparkContext(conf = conf)
 	files = ','.join(["/user/photo_dump/"+f+"*" for f in files_to_read_tmp()])
 	print "Reading the files"
 	lines = sc.textFile("/user/photo_dump/20150203_220005.dat")
-	result = lines.filter(ispost)\
+	result = lines.filter(isbehavior)\
 			.flatMap(extractTags) \
 			.map(lambda x: [x[0], [1, x[1]] ]) \
 			.reduceByKey(add2) \

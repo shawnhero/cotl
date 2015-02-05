@@ -6,5 +6,6 @@ import time
 from struct import *
 connection = happybase.Connection('c0tl.com')
 user_newsfeed = connection.table('user_newsfeed')
-row = user_newsfeed.row(pack('Q',1),columns=['newsfeed'])
-print row
+# row = user_newsfeed.row(pack('Q',1),columns=['newsfeed'])
+for key, data in user_newsfeed.scan(row_start=pack('Q',10), row_stop=pack('Q',15)):
+	print unpack('Q',key), data
