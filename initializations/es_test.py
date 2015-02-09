@@ -4,13 +4,14 @@ import sys
 
 
 if __name__ == "__main__":
-	if len(sys.argv)!=3:
-		print "Usage: [*.py] [lat] [lon]"
+	if len(sys.argv)!=4:
+		print "Usage: [*.py] [lat] [lon] [R]"
 		sys.exit(0)
 	es = ElasticSearch('http://localhost:9200/')
 	lat = float(sys.argv[1])
 	lon = float(sys.argv[2])
-	print lat, lon
+	r = float(sys.argv[3])
+	print lat, lon, r
 	query = {
 		"from" : 0, "size" : 10,
 		'query': {
@@ -18,7 +19,7 @@ if __name__ == "__main__":
 		 },
 		 "filter" : {
 			"geo_distance" : {
-				"distance" : "100km",
+				"distance" : str(r)+'km',
 				"location" : {
 					"lat" : lat,
 					"lon" : lon
@@ -49,9 +50,10 @@ if __name__ == "__main__":
 		"_score"
 		],
 	 }
-	res =  es.search(query1, index='photo_geos',doc_type=['photos'])
+	res =  es.search(query, index='photo_geos',doc_type=['photos'])
 	print res
-	uids = [(r['_id'],r['sort'], r['_source']['location']) for r in res['hits']['hits']]
+	# uids = [(r['_id'],r['sort'], r['_source']['location']) for r in res['hits']['hits']]
+	uids = [(r['_id'],r['sort'][0], r['_source']['views'], r['_source']['likes'], r['_source']['location']['lat'], r['_source']['location']['lon']) for r in res['hits']['hits']]
 	print len(uids)
 	for i in range(len(uids)):
 		print uids[i]

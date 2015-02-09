@@ -20,10 +20,12 @@
 <title>COTL</title>
 <meta name="description" content="A location-based photo sharing system.">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 <link rel="stylesheet" href="//blueimp.github.io/Gallery/css/blueimp-gallery.min.css">
 <link rel="stylesheet" href="../css/bootstrap-image-gallery.css">
 <link rel="stylesheet" href="../css/demo.css">
+<link rel="stylesheet" href="../css/numphoto.css">
 </head>
 <body>
 <div class="navbar navbar-default navbar-fixed-top navbar-inverse">
@@ -77,12 +79,13 @@
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
     
     <ul class="nav navbar-nav">
-    <form class="navbar-form navbar-left" role="search">
+    <form class="navbar-form navbar-left" role="search" id="findnearby">
   <div class="form-group">
-    <input type="text" class="form-control" placeholder="Latitude">
-    <input type="text" class="form-control" placeholder="Longitude">
-    <input type="text" class="form-control" placeholder="Radius">
+    <input type="text" class="form-control" placeholder="Latitude" id='lat'>
+    <input type="text" class="form-control" placeholder="Longitude" id='lon'>
+    <input type="text" class="form-control" placeholder="Radius" id='r'>
   </div>
+
   <button type="submit" class="btn btn-default">Get Trending Photos!</button>
 </form>
 </ul>
@@ -141,7 +144,7 @@
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 <script src="//blueimp.github.io/Gallery/js/jquery.blueimp-gallery.min.js"></script>
 <script src="../js/bootstrap-image-gallery.js"></script>
-<!-- <script src="../js/demo.js"></script> -->
+<script src="../js/nearby.js"></script>
 <script>
 // document.getElementById('links').onclick = function (event) {
 //     event = event || window.event;

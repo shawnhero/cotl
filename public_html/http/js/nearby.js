@@ -11,39 +11,38 @@
 
 /*jslint unparam: true */
 /*global blueimp, $ */
+// $('[data-toggle="tooltip"]').tooltip({
+//     'placement': 'top'
+// });
 
-$('#uid_newsfeed').bind('submit',function(e) {
+$('#findnearby').bind('submit',function(e) {
     e.preventDefault(); //Will prevent the submit...
-    var uid_value=$("#uid").val();
-    if (! $.isNumeric(uid_value)){
-        alert("Enter a valid UID!");
+    var lat=$("#lat").val();
+    var lon=$("#lon").val();
+    var R=$("#r").val();
+    if (! $.isNumeric(lat) || ! $.isNumeric(lon) || ! $.isNumeric(R)){
+        alert("Enter valid numbers!");
         return;
     }
+    var formData = {lat: lat, lon: lon, r: R};
 
-      $.ajax({
-        // Flickr API is SSL only:
-        // https://code.flickr.net/2014/04/30/flickr-api-going-ssl-only-on-june-27th-2014/
-        url: 'http://c0tl.com/api/uid/'+uid_value,
-        // data: {
-        //     format: 'json',
-        //     method: 'flickr.interestingness.getList',
-        //     api_key: '7617adae70159d09ba78cfec73c13be3' // jshint ignore:line
-        // },
-        // dataType: 'jsonp'//'jsonp',
+    $.ajax({
+        url: 'http://c0tl.com/api/nearby/',
+        type: "POST",
+        data : formData,
         jsonp: 'jsoncallback'
     }).done(function (result) {
         // var returnedData = eval(result);
         var returnedData = JSON.parse(result);
 
-        var linksContainer = $('#links'),
-            baseUrl;
+        var linksContainer = $('#links');
 
         // first remove all the images
         $('#links')
             .empty();
         // Add the demo images as links with thumbnails to the page:
-
-        $.each(returnedData, function (index, photo) {
+        var pos = 0;
+         $.each(returnedData, function (index, photo) {
             
             baseUrl = photo.photo.URL;
             var sUrl =  baseUrl;
@@ -54,8 +53,9 @@ $('#uid_newsfeed').bind('submit',function(e) {
                 bUrl = baseUrl+'b.jpg';
             }
             
-            $("<a class='photo'/>")
-                .append($('<img>').prop('src', sUrl))
+            var tooltip_str = 'Distance: '+String(photo.distance)+'km\nNumLiked:'+String(photo.numLiked)+'\nNumPassed:'+String(photo.numViewed)+"\n";
+            $("<a class='photo' />")
+                .append($("<img numlikes="+String(photo.numLiked)+" data-toggle='tooltip' data-placement='top' title='"+tooltip_str+"'>").prop('src', sUrl))
                 .prop('href', bUrl)
                 .prop('title', photo.photo.title)
                 .attr('data-gallery', '')
@@ -63,7 +63,7 @@ $('#uid_newsfeed').bind('submit',function(e) {
                 .appendTo(linksContainer);
         });
         // find all the image and then add sibling
-
+        $('[data-toggle="tooltip"]').tooltip()
 
 
 
@@ -75,7 +75,7 @@ $('#uid_newsfeed').bind('submit',function(e) {
                 // alert(String(img.height));
                  // img.addClass( "bigImg" );
                 var itstyle = "style='color:rgba(255, 255, 255, 0.8);position:absolute;left:"+String(img.width/2 - 55)+"px;top: -55px;font-family:Impact, Charcoal, sans-serif;;display: table-cell;font-size:100px;'"
-                it.after( "<span class='score' "+itstyle+"></span>" );
+                it.after( "<span class='score' "+itstyle+">"+it.attr('numlikes')+"</span>" );
                 // 
                 // 
             }, 0);
