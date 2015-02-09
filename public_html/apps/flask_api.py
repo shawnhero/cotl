@@ -2,11 +2,19 @@
 from flask import Flask, request, json
 import flask
 import happybase
+import hashlib
 hbasehost = 'c0tl.com'
 from struct import *
 app = Flask(__name__)
 
-
+#retrieve all the photos
+def get_row_prefix(uid, timestamp=None):
+	prefix = hashlib.md5(str(uid)).digest()
+	if timestamp:
+		prefix += str(timestamp)
+	print "Prefix:",prefix
+	return prefix
+	
 
 # APIs offered by flask
 
@@ -25,19 +33,31 @@ def newsfeed(userid):
 	except ValueError:
 		return "Invalid uid"
 	# connect to HBase and return the newsfeed
+	alldata = {}
 	try:
 		connection = happybase.Connection(hbasehost)
 		user_newsfeed = connection.table('user_newsfeed')
-		row = user_newsfeed.row(pack('Q',uid),columns=['newsfeed'])
-		for key in row.keys():
-			# print type(key), type(json.loads(row[key]))
-			row[key] = json.loads(row[key])
+		count = 0
+		for key, data in user_newsfeed.scan(row_prefix=get_row_prefix(userid)):
+			# skip those viewed photos
+			if 'p:viewed' in data:
+				continue
+			alldata[count] = json.loads(data["p:dump"])
+			count +=1
 	except Exception as e:
 		print "Exception"
 		return str(e)
-	print type(row)
 	# print row
-	return json.dumps(row)
+	# doing the following will be better than json.loads once every time
+	# return str(json.dumps(alldata).replace('\\',''))
+	return json.dumps(alldata)
+
+
+# return the distribution of the number of newsfeed
+@app.route('/dist')
+def dist_newsfeed():
+	return 0
+
 
 # given a location, return the most popular photos
 @app.route('/location/<geo>')

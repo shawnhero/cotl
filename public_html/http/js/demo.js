@@ -32,9 +32,9 @@ $('#uid_newsfeed').bind('submit',function(e) {
         // dataType: 'jsonp'//'jsonp',
         jsonp: 'jsoncallback'
     }).done(function (result) {
-        // alert(result);
         // var returnedData = eval(result);
         var returnedData = JSON.parse(result);
+
         var linksContainer = $('#links'),
             baseUrl;
 
@@ -54,13 +54,35 @@ $('#uid_newsfeed').bind('submit',function(e) {
                 bUrl = baseUrl+'b.jpg';
             }
             
-            $('<a/>')
+            $("<a class='photo'/>")
                 .append($('<img>').prop('src', sUrl))
                 .prop('href', bUrl)
-                .prop('title', photo.photo.title)
+                .prop('title', photo.photo.title[0])
                 .attr('data-gallery', '')
+                // .append("<span class='score' style='font-size:300'>88</span>")
                 .appendTo(linksContainer);
         });
+        // find all the image and then add sibling
+
+
+
+
+        $("img").one("load", function(){
+            var img = this;
+            var it = $(this);
+            setTimeout(function(){
+                // do something based on img.width and/or img.height
+                // alert(String(img.height));
+                 // img.addClass( "bigImg" );
+                var itstyle = "style='color:rgba(255, 255, 255, 0.8);position:absolute;left:"+String(img.width/2 - 55)+"px;top: -55px;font-family:Impact, Charcoal, sans-serif;;display: table-cell;font-size:100px;'"
+                it.after( "<span class='score' "+itstyle+">88</span>" );
+                // 
+                // 
+            }, 0);
+        });
+
+        // $('.score').attr('style', 'color:white;font-size:100px;position: absolute;left: 5px;bottom: 0;font-family:Impact, Charcoal, sans-serif;opacity: 0.8;');
+
     });
 
     // $('#borderless-checkbox').on('change', function () {

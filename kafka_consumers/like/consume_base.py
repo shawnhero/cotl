@@ -7,7 +7,7 @@ from webhdfs.webhdfs import WebHDFS
 
 
 class BaseConsumer():
-	def __init__(self,group_name, topic_name, timeout=5, filename='config.txt'):
+	def __init__(self,group_name, topic_name, timeout=60, filename='config.txt'):
 		self.logger = logging.getLogger(__name__)
 		self.logger.setLevel(logging.INFO)
 		handler = logging.FileHandler('../_logs/%s.log'%group_name)
@@ -42,18 +42,20 @@ class BaseConsumer():
 			raise
 
 	def run(self):
-		consumer = SimpleConsumer(self.kafka, self.group_name, self.topic_name,iter_timeout=self.timeout)
+		consumer = SimpleConsumer(self.kafka, self.group_name, self.topic_name,iter_timeout=self.timeout, buffer_size=4096*8,max_buffer_size=None)
+		print "setting max_buffer_size=None"
 		try:
 			for message in consumer:
 				parsed_msg = json.loads(message.message.value)
-				self.handle_msg(parsed_msg)
 				# print parsed_msg
+				self.handle_msg(parsed_msg)
 				self.logger.info('OK%s'%str(consumer.offsets))
 		except Exception as e:
+			print "Exception", str(e)
 			self.logger.warning( "Exception %s offset, %s" % (self.group_name, consumer.offsets))
-			self.logger.exception(e)
-			raise
-
+			self.logger.warning( str(e) )
+			# raise
+			sys.exit(0)
 
 	def handle_msg(self, parsed_msg):
 		# to be overrided

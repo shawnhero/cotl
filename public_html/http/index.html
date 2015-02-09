@@ -13,6 +13,43 @@
 -->
 <html lang="en">
 <head>
+<style type="text/css">
+
+a.photo {
+    position: relative;
+    vertical-align: middle;
+    /*width: 1000px;*/
+    text-decoration: none !important;
+    text-align: center;
+    opacity: 0.6;
+}
+a.photo img{
+    opacity: 0.9;
+}
+/*a.photo img:hover{
+    opacity: 1;
+}*/
+/*a.photo:after {
+    content: attr(title);
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    padding: 25px 25px;
+    color: white;
+    font-size:100;
+    font-family: Impact, Charcoal, sans-serif;
+    opacity: 1;
+}
+a.photo:hover:after, a.photo:focus:after {
+    opacity: 0.5;
+}*/
+a.photo:hover{
+    opacity: 1;
+}
+
+
+
+</style>
 <!--[if IE]>
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <![endif]-->
@@ -148,6 +185,16 @@
 <script src="//blueimp.github.io/Gallery/js/jquery.blueimp-gallery.min.js"></script>
 <script src="js/bootstrap-image-gallery.js"></script>
 <script src="js/demo.js"></script>
+
+<script>
+blueimp.Gallery(
+    document.getElementById('links').getElementsByTagName('a'),
+    {
+        container: '#blueimp-gallery-carousel',
+        carousel: true
+    }
+);
+</script>
 <script>
 // document.getElementById('links').onclick = function (event) {
 //     event = event || window.event;

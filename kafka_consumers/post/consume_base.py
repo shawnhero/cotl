@@ -7,7 +7,7 @@ from webhdfs.webhdfs import WebHDFS
 
 
 class BaseConsumer():
-	def __init__(self,group_name, topic_name, timeout=5, filename='config.txt'):
+	def __init__(self,group_name, topic_name, timeout=60, filename='config.txt'):
 		self.logger = logging.getLogger(__name__)
 		self.logger.setLevel(logging.INFO)
 		handler = logging.FileHandler('../_logs/%s.log'%group_name)
@@ -53,8 +53,8 @@ class BaseConsumer():
 		except Exception as e:
 			self.logger.warning( "Exception %s offset, %s" % (self.group_name, consumer.offsets))
 			self.logger.warning( str(e) )
-			# raise
-			sys.exit(0)
+			raise
+			# sys.exit(0)
 
 	def handle_msg(self, parsed_msg):
 		# to be overrided

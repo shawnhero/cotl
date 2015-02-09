@@ -71,11 +71,12 @@ class ProduceMsg(threading.Thread):
 					'description': description,
 					'tags': tags,
 					'URL': URL,
-					'timeposted': int(timeposted)
-				},
-				'location': {
-					'latitude': self.user_geos[user_id, 1], 
-					'longitude': self.user_geos[user_id, 2]
+					'timeposted': int(timeposted),
+					'location': 
+					{
+						'latitude': self.user_geos[user_id, 1], 
+						'longitude': self.user_geos[user_id, 2]
+					}
 				}
 			}
 			raw_data = json.dumps(photo_dict)
@@ -103,7 +104,7 @@ class StreamOut():
 	# # send data to kafka
 	# print 'pushing', raw_data
 	# producer.send_messages("ts", raw_data)
-	def fake_photo_detail(self, pid):
+	def simulate_photo_detail(self, pid):
 		user_id =  np.random.randint(0,self.num_users)
 		photo_dict = {}
 		photo_dict['data'] = {
@@ -111,15 +112,16 @@ class StreamOut():
 			'user_id': user_id,
 			"photo": {
 				'pid': int(pid),
-				'title': 'faked title:'+str(np.random.randint(0,1000)), 
-				'description': 'faked description:'+str(np.random.randint(0,1000)), 
+				'title': 'random title:'+str(np.random.randint(0,1000)), 
+				'description': 'random description:'+str(np.random.randint(0,1000)), 
 				'tags': ['hello', 'world'],
 				'URL': 'http://c0tl.com/images/luxi'+str(pid%6)+'.jpg',
-				'timeposted': int( time.time())
-			},
-			'location': {
-				'latitude': self.user_geos[user_id, 1], 
-				'longitude': self.user_geos[user_id, 2]
+				'timeposted': int( time.time()),
+				'location': 
+				{
+					'latitude': self.user_geos[user_id, 1], 
+					'longitude': self.user_geos[user_id, 2]
+				}
 			}
 		}
 		raw_data = json.dumps(photo_dict)
@@ -131,7 +133,7 @@ class StreamOut():
 		if self.num_per_second>3:
 			while self.ttr>0:
 				for i in range(self.num_per_second):
-					photo_msg = self.fake_photo_detail(pid)
+					photo_msg = self.simulate_photo_detail(pid)
 					pid = pid + 1
 					print photo_msg
 					self.producer.send_messages(self.topic_name, photo_msg)
@@ -225,45 +227,58 @@ def readkeys(path_to_file):
 def savephoto():
 	pass
 
+
+def prompt_error():
+	print "Usage: [*.py] [topic_name] [optional: throughput number] [optional: seconds to run]"
+	sys.exit(0)
+
 def evaluate_input():
-	if len(sys.argv)==1:
+	if len(sys.argv)>=2:
+		try:
+			topic = int(sys.argv[1])
+		except Exception as e:
+			pass
+		else:
+			prompt_error()
+	if len(sys.argv)==2:
 		# start the stream in the natural mode
 		print "natural mode"
+		print "topic_name:", sys.argv[1]
 		num, ttr = 0, 0
-	elif len(sys.argv)==2:
+
+	elif len(sys.argv)==3:
 		try:
-			num = int(sys.argv[1])
+			num = int(sys.argv[2])
 		except ValueError:
-			print "Usage: [*.py] [optional: throughput number] [optional: seconds to run]"
-			sys.exit(0)
+			prompt_error()
 		# to do below..
 		# start the stream in a controlled mode
 		print "controlled mode:", 'natural' if num==0 else num
 		print "time to run: infinite"
 		ttr = 0
-	elif len(sys.argv)==3:
+	elif len(sys.argv)==4:
 		try:
-			num = int(sys.argv[1])
-			ttr = int(sys.argv[2])
+			num = int(sys.argv[2])
+			ttr = int(sys.argv[3])
 		except ValueError:
-			print "Usage: [*.py] [optional: throughput number] [optional: seconds to run]"
-			sys.exit(0)
+			prompt_error()
 		# to do below..
 		# start the stream in a controlled mode
 		print "controlled mode:", 'natural' if num==0 else num
 		print "time to run:", ttr
 	else:
-		print "Usage: [*.py] [optional: throughput number] [optional: seconds to run]"
-		sys.exit(0)
-	return num, ttr
+		prompt_error()
+	return sys.argv[1], num, ttr
+
+
+
 
 if __name__ == "__main__":
-	num, ttr = evaluate_input()
+	topic_name, num, ttr = evaluate_input()
 	# preparation works
 	keys, secrets = readkeys('api_keys.txt')
-	user_geos = np.load('../simulated_users/user_geos.npy')
+	user_geos = np.load('../initializations/user_geos.npy')
 	kafkahost = "localhost:9092"
-	topic_name = 'new_e'
 	stream = StreamOut(
 				num,
 				user_geos, 
