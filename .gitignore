@@ -9,5 +9,5 @@ spark_hbase/target
 spark_hbase/project/target
 kafka_consumers/_logs/*
 *_log/
-.ipynb
+*.ipynb
 spark_hdfs/run_ipython.sh
