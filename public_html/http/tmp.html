@@ -1,0 +1,95 @@
+<style type="text/css">
+div {
+	display: table;
+  text-align: center;
+  
+}
+.photo{
+	background-image:url('http://c0tl.com/images/luxi0.jpg');
+	filter: alpha(opacity=100); 
+}
+
+.text {
+  display: table-cell;
+  vertical-align: middle;
+  color:grey;
+  font-size:100;
+  font-family: Impact, Charcoal, sans-serif;
+  opacity: 0.5
+
+}
+/*.text:hover{
+	opacity: 1
+}*/
+/*.photo:hover{
+	opacity: 0.35; 
+	filter: alpha(opacity=50);
+}*/
+a.photo {
+	position: relative;
+	vertical-align: middle;
+	/*width: 1000px;*/
+	text-decoration: none !important;
+	text-align: center;
+	opacity: 0.2;
+}
+a.photo:after {
+	content: attr(value);
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	/*top:0;*/
+	padding: 25px 25px;
+	color: white;
+  	font-size:100;
+  	font-family: Impact, Charcoal, sans-serif;
+	/*width: 460px;*/
+	/*background: rgba(0,0,0,0.8);*/
+	/*text-decoration: none !important;*/
+	opacity: 1;
+}
+a.photo:hover:after, a.photo:focus:after {
+	opacity: 0.5;
+}
+a.photo:hover{
+	opacity: 0.5;
+}
+
+}
+
+
+
+</style>
+<span class="photo s1">
+<image src='http://c0tl.com/images/luxi0.jpg'></image>
+	 
+	<span class='text'>89</span>
+
+</span>
+<div class="photo">
+
+	 
+	<span class='text'>89</span>
+
+</div>
+
+
+<a class='photo' value="87" href='http://c0tl.com/images/luxi0.jpg'>
+<image src='http://c0tl.com/images/luxi0.jpg'></image>
+</a>
+
+<a class='photo' value="88" href='http://c0tl.com/images/luxi1.jpg'>
+<image src='http://c0tl.com/images/luxi1.jpg'></image>
+</a>
+
+<a class='photo' value="91" href='http://c0tl.com/images/luxi2.jpg'>
+<image src='http://c0tl.com/images/luxi2.jpg'></image>
+</a>
+<a class='photo' value="99" href='http://c0tl.com/images/luxi3.jpg'>
+<span class='score'>06</span>
+<image src='http://c0tl.com/images/luxi3.jpg'></image>
+</a>
+
+
+
+

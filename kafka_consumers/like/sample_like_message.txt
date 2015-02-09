@@ -1,0 +1,92 @@
+#sample message sent to kafka
+{"data": 
+	{
+		"action": "like", 
+        "user_id": 95, 
+        "location":
+        {
+            "latitude": 39.5000,
+            "longitude": -123.3356
+        },
+        "update_user_geo": 'no',
+		"photo": 
+		{
+            "pid": 16385653535,
+			"URL": "https://farm9.staticflickr.com/8587/16196839837_44646d4a3b_b.jpg", 
+			"tags": ["midville", "middlevillage", "tumblr", "11379"], 
+			"description": "via Tumblr <a href=\\"http://ift.tt/1CdzfgB\\" rel=\\"nofollow\\">ift.tt/1CdzfgB</a>", 
+			"title": "#Maspeth #maspethqueens by candicehuezo http://ift.tt/1CvJCLi",
+            'timeposted': 1422390701,
+            "location": 
+            {
+               "latitude": 37.488165001918695, 
+                "longitude": -122.35799719884271
+            }
+        }
+	}
+}
+
+
+{"data": {"update_user_geo": "no", "user_id": 3.0, "photo": {"timeposted": 1423336155, "description": "Walking around Tilly, Marbais &amp; Marbisoux with a new (to me) lens, the telezoom Pentax 50-200mm f/4-5.6 ED  tags:", "tags": "belgium,brabantwallon,countryside,landscape,places,seasons,villerslaville,winter", "URL": "https://farm8.staticflickr.com/7341/15843620404_bfb9582988_b.jpg", "title": "+", "pid": 15843620404, "location": {"latitude": 37.47384300824535, "longitude": -121.88238787722528}}, "timeviewed": 1423365948, "location": {"latitude": 37.423404428687611, "longitude": -121.9730492119004}, "action": "view"}}
+
+#sample photo information from flickr
+{
+    'stat': 'ok',
+    'photo': 
+    {
+        'people': {'haspeople': 0}, 
+        'dateuploaded': '1422390701', 
+        'originalformat': 'jpg', 
+        'owner': 
+        {'username': 
+            'W.S.V. HAIRT - hILLE', 
+            'realname': '', 
+            'nsid': '80201601@N02', 
+            'iconserver': '8548', 
+            'location': '', 
+            'path_alias': 'hairthille', 
+            'iconfarm': 9
+        }, 
+        'publiceditability': 
+        {
+            'canaddmeta': 0, 
+            'cancomment': 0
+        }, 
+        'id': '16383039655', 
+        'title': {'_content': '2015-01-10 Nieuwjaarsparty 025'}, 
+        'media': 'photo', 
+        'tags': {'tag': []}, 
+        'comments': {'_content': '0'}, 
+        'secret': 'b9ded2e431', 
+        'usage': 
+        {
+            'canblog': 0, 
+            'canshare': 0, 
+            'candownload': 1, 
+            'canprint': 0
+        }, 
+        'description': {'_content': ''}, 
+        'isfavorite': 0, 
+        'views': '0', 
+        'farm': 8, 
+        'visibility': {'isfriend': 0, 'isfamily': 0, 'ispublic': 1}, 'rotation': 0, 
+        'dates': 
+        {
+            'taken': '2015-01-13 09:56:12', 
+            'takenunknown': '0', 
+            'takengranularity': '0', 
+            'lastupdate': '1422390706', 
+            'posted': '1422390701'
+        }, 
+        'originalsecret': '9cac4a221c', 
+        'license': '0', 
+        'notes': {'note': []}, 
+        'server': '7447', 
+        'safety_level': '0', 
+        'urls': 
+        {
+            'url': [{'type': 'photopage', '_content': 'https://www.flickr.com/photos/hairthille/16383039655/'}]
+        }, 
+        'editability': {'canaddmeta': 0, 'cancomment': 0}
+    }
+}
