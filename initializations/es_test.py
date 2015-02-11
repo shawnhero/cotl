@@ -50,9 +50,21 @@ if __name__ == "__main__":
 		"_score"
 		],
 	 }
-	res =  es.search(query, index='photo_geos',doc_type=['photos'])
+	query_count = {
+	 	"facets": {
+        "count_by_type": {
+            "terms": {
+                "field": "_type"
+            }
+        }
+    }
+	 }
+	# res =  es.search(query, index='photo_geos',doc_type=['photos'])
+	res =  es.search(query_count, index='geos',doc_type=['user_geos'])
 	print res
-	# uids = [(r['_id'],r['sort'], r['_source']['location']) for r in res['hits']['hits']]
+	sys.exit(0)
+
+
 	uids = [(r['_id'],r['sort'][0], r['_source']['views'], r['_source']['likes'], r['_source']['location']['lat'], r['_source']['location']['lon']) for r in res['hits']['hits']]
 	print len(uids)
 	for i in range(len(uids)):

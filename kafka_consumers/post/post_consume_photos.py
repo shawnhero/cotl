@@ -14,6 +14,7 @@ class Photo_Consumer(BaseConsumer):
 		pid = parsed_msg['data']['photo']['pid']
 		rowkey = hashlib.md5(str(pid)).digest()
 		## ready to write to hbase
+		print pid
 		with self.pool.connection() as connection:
 			photos = connection.table(tbl_name)
 			photos.put(	

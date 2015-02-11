@@ -35,7 +35,7 @@ connection.create_table('users', families)
 # col name(fixed, in production one can change it to 'd', 'v'): dump, viewed
 # value: photo info dump. easy to access, downside: when modify a photo, not consistent
 families = {
-	'p': dict(time_to_live=259200)
+	'p': dict()
 	# dump, viewed
 }
 connection.create_table('user_newsfeed', families)
@@ -47,6 +47,9 @@ connection.create_table('user_newsfeed', families)
 # col family: p
 # col name(fixed): dump
 # value: photo info dump. easy to access, downside: when modify a photo, not consistent
+
+# note: in production, set the time to live as below
+# time_to_live=259200
 families = {
 	'p': {}
 	# dump

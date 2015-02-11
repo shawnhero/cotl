@@ -33,7 +33,7 @@ class HDFS_Consumer(BaseConsumer):
 
 	def handle_msg(self, parsed_msg):
 		msg = self.flatten_msg(parsed_msg)
-		# print msg
+		print msg
 		self.ftmp.write(msg)
 		# if the tmp file size exceeds certain limits, flush it to HDFS
 		if self.ftmp.tell()>self.max_tmp_size:

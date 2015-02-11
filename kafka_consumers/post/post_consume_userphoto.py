@@ -16,6 +16,7 @@ class UserPhoto_Consumer(BaseConsumer):
 			timeposted = parsed_msg['data']['photo']['timeposted']
 			rowkey = get_row_key(uid, pid, timeposted, uidfirst=True)
 			## ready to write to hbase
+			print uid, pid
 			user_photos = connection.table(tbl_name)
 			user_photos.put(
 					rowkey, 
