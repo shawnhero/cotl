@@ -1,13 +1,13 @@
 #COTL
 
-[c0tl.com](c0tl.com)
+<a href="http://c0tl.com" target="_blank">c0tl.com</a>
 
-(The servers might be shut down in the future, if so, check the [demo video](https://www.youtube.com/watch?v=S6FMyvabifs))
+(The servers might be shut down in the future, if so, check the <a href="https://www.youtube.com/watch?v=S6FMyvabifs" target="_blank">demo video</a>)
 
 A location-based photo sharing system.
 
 See the following slides for data pipeline details.
-[Data Pipeline](http://prezi.com/embed/nyrdqazqwfm_/?bgcolor=ffffff&amp;lock_to_path=1&amp;autoplay=0&amp;autohide_ctrls=0#)
+<a href="http://prezi.com/embed/nyrdqazqwfm_/?bgcolor=ffffff&amp;lock_to_path=1&amp;autoplay=0&amp;autohide_ctrls=0#" target="_blank">Data Pipeline</a>
 
 Click into each folder to see more details.
 
