@@ -2,9 +2,9 @@
 
 The script is a multiprocess simulator.
 
-First, it reads the `user_geos.npy` file we generated in the `initilization` step. Then split the work to several works.
+First, it reads the `user_geos.npy` file we generated in the `initilization` step. Then split the work to several workers.
 
-Second, each worker will have a list of UIDs to scan. By scanning the users' newsfeed, the work made the decision whether to like the photo or not, and send the message back to `Kafka`.
+Second, each worker will have a list of UIDs to scan. By scanning the users' newsfeed, the worker made the decision whether to like the photo or not, and send the message back to `Kafka`.
 
 
 ##Assumptions
