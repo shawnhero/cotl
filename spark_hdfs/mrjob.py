@@ -111,13 +111,13 @@ if __name__=="__main__":
 	hbasetblname='top_tags'
 	esindexname = 'photo_geos'
 	esdocname = 'photos'
-	# create_new_tag_table()
-	# create_new_es_table()
+	create_new_tag_table()
+	create_new_es_table()
 
 
 	# gv = Generate_Views(hbasetblname='top_tags',esindexname='photo_geos', esdocname='photos')
 	print "Reading the files"
-	lines = sc.textFile("/user/photo_dump/like/20150208_084933.dat")
+	lines = sc.textFile("/user/photo_dump/like/201502*")
 
 
 	result = lines.filter(lambda x: x[:4]=="like" or x[:4]=="view")\

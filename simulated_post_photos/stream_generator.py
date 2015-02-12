@@ -162,7 +162,7 @@ class StreamOut():
 			except UnicodeDecodeError:
 				# flickr api will complain such error, anyway just wait a few seconds
 				# and retry
-				print str(e)
+				print "UnicodeDecodeError"
 				time.sleep(10)
 				continue
 			count = 0
@@ -278,6 +278,7 @@ if __name__ == "__main__":
 	# preparation works
 	keys, secrets = readkeys('api_keys.txt')
 	user_geos = np.load('../initializations/user_geos.npy')
+	print user_geos.shape[0], 'users loaded!'
 	kafkahost = "localhost:9092"
 	stream = StreamOut(
 				num,
