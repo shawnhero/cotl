@@ -1,5 +1,9 @@
 #COTL
 
+[c0tl.com](c0tl.com)
+
+(The servers might be shut down in the future, if so, check the [demo video](https://www.youtube.com/watch?v=S6FMyvabifs))
+
 A location-based photo sharing system.
 
 See the following slides for data pipeline details.
